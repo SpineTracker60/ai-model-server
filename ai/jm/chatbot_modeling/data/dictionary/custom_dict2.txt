@@ -1,0 +1,19 @@
+의자    NNP
+책상    NNP
+모니터암    NNP
+모니터 암   NNP
+모니터받침대    NNP
+모니터 받침대   NNP
+모니터거치대    NNP
+모니터 거치대   NNP
+손목보호대  NNP
+손목 보호대 NNP
+목배게  NNP
+목 배게 NNP
+배게    NNP
+마우스  NNP
+마우스패드  NNP
+마우스 패드 NNP
+키보드  NNP
+방석    NNP
+암뇸뇸  NNP
