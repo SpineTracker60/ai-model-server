@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Animation Gen</title>
+</head>
+<body>
+    <h1>MP TEST</h1>
+    <div>
+        <img src="{{ url_for('main.video_feed') }}" width="640" height="480" style="border: 2px solid black;">
+    </div>
+
+    <div id="button-container">
+        {% if recording %}
+        <p>Recording...</p>
+        <form action="/stop_recording" method="post">
+            <button id="recording-button" type="submit">Stop Recording</button>
+        </form>
+        {% else %}
+        <form action="/start_recording" method="post">
+            <button id="recording-button" type="submit">Start Recording</button>
+        </form>
+        {% endif %}
+    </div>
+
+    <script>
+        // Flask 변수를 JavaScript로 가져와서 버튼 텍스트 변경
+        var button = document.getElementById('recording-button');
+        var isRecording = {{ recording|lower }};  // Flask 변수를 JavaScript 변수로 가져옴
+    
+        button.onclick = function() {
+            // 클릭 이벤트 핸들러에서 isRecording 값을 확인
+            if (isRecording === 'True') {
+                // 녹화 중일 때, 서버의 /stop_recording 엔드포인트로 요청 보내기
+                fetch('/stop_recording', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        // 서버에서 반환한 데이터를 확인하고 원하는 작업 수행
+                        if (data.success) {
+                            // 녹화 정지 성공적으로 처리됨
+                            console.log("Recording stopped");
+                        } else {
+                            // 녹화 정지에 실패한 경우
+                            console.error("Failed to stop recording");
+                        }
+                    })
+                    .catch(error => console.error(error));
+            } else {
+                // 녹화 중이 아닐 때, 서버의 /start_recording 엔드포인트로 요청 보내기
+                fetch('/start_recording', { method: 'POST' })
+                    .then(response => response.json())
+                    .then(data => {
+                        // 서버에서 반환한 데이터를 확인하고 원하는 작업 수행
+                        if (data.success) {
+                            // 녹화 시작 성공적으로 처리됨
+                            console.log("Recording started");
+                        } else {
+                            // 녹화 시작에 실패한 경우
+                            console.error("Failed to start recording");
+                        }
+                    })
+                    .catch(error => console.error(error));
+            }
+        };
+    </script>
+    
+    <!--
+
+        <script>
+            var isRecording = {{ recording|default('false')|lower }};  // Flask 변수를 JavaScript 변수로 가져옴
+            
+            function toggleRecording() {
+                // AJAX 요청을 사용하여 서버와 통신
+                fetch('/start_recording', { method: 'POST' })
+                .then(response => response.json())
+                .then(data => {
+                    // 서버에서 반환한 데이터를 사용하여 버튼 상태 변경
+                    if (data.recording) {
+                        document.getElementById('recording-button').textContent = 'Stop Recording';
+                    } else {
+                        document.getElementById('recording-button').textContent = 'Start Recording';
+                    }
+                })
+                .catch(error => console.error(error));
+            }
+        </script>
+        
+        <script>
+            // Flask 변수를 JavaScript로 가져와서 버튼 텍스트 변경
+            var button = document.getElementById('recording-button');
+            var isRecording = {{ recording|lower }};  // Flask 변수를 JavaScript 변수로 가져옴
+            
+            if (isRecording === 'True') {
+                button.innerHTML = 'Stop Recording';
+                console.log(isRecording);
+            } else {
+                button.innerHTML = 'Start Recording';
+                console.log(isRecording);
+            }
+        </script>
+    -->
+    </body>
+</html>
